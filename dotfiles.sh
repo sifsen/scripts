@@ -1,4 +1,4 @@
-REPO_URL="https://github.com/ohsenko/dotfiles.git"
+REPO_URL="git@github.com:ohsenko/dotfiles.git"
 TEMP_DIR="$HOME/temp_dotfiles"
 CONFIG_DIR="$HOME/.config"
 
@@ -12,25 +12,25 @@ if ! command_exists stow; then
         sudo apt update && sudo apt install stow -y
     elif command_exists pacman; then
         sudo pacman -S stow --noconfirm
-    elif command_exists brew; then
-        brew install stow
+    elif command_exists dnf; then
+        sudo dnf install stow
     else
-        echo "Package manager not found. Please install 'stow' manually."
+        echo "package manager not found. please install 'stow' manually."
         exit 1
     fi
 fi
 
 if [ -d "$TEMP_DIR" ]; then
-    echo "Dotfiles repository already exists in $TEMP_DIR. Pulling the latest changes..."
+    echo "dotfiles repository already exists in $TEMP_DIR. pulling the latest changes..."
     cd "$TEMP_DIR" && git pull origin main
 else
-    echo "Cloning the dotfiles repository..."
+    echo "cloning the dotfiles repository..."
     git clone "$REPO_URL" "$TEMP_DIR"
 fi
 
-cd "$TEMP_DIR" || { echo "Failed to navigate to cloned directory."; exit 1; }
+cd "$TEMP_DIR" || { echo "could not move into directory. exiting..."; exit 1; }
 
-echo "Stowing configuration files..."
+echo "stowing configuration files..."
 for dir in */; do
     if [[ "$dir" == .git/ ]]; then
         continue
@@ -38,7 +38,7 @@ for dir in */; do
     stow --dir="$TEMP_DIR" --target="$HOME" "$dir"
 done
 
-echo "Cleaning up temporary files..."
+echo "cleaning up temporary files..."
 rm -rf "$TEMP_DIR"
 
-echo "Dotfiles setup is complete!"
+echo "dotfiles setup is complete!"
