@@ -20,6 +20,11 @@ if ! command_exists stow; then
     fi
 fi
 
+if [ ! -d "$TEMP_DIR" ]; then
+    echo "creating temporary directory $TEMP_DIR..."
+    mkdir -p "$TEMP_DIR"
+fi
+
 if [ -d "$TEMP_DIR" ]; then
     echo "dotfiles repository already exists in $TEMP_DIR. pulling the latest changes..."
     cd "$TEMP_DIR" && git pull origin main
